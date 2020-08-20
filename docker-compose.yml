@@ -1,0 +1,31 @@
+version: '3'
+services:
+    web:
+        build: .
+        ports: 
+            - "8081:80"
+        depends_on:
+            - redis
+            - kafka
+            - zookeeper
+        environment:
+            ASPNETCORE_ENVIRONMENT: production
+    redis:
+        image: "redis:alpine"
+    zookeeper:
+        image: confluentinc/cp-zookeeper:latest
+        network_mode: host
+        environment:
+            ZOOKEEPER_CLIENT_PORT: 2180
+            ZOOKEEPER_TICK_TIME: 2000
+            ZOOKEEPER_SYNC_LIMIT: 2
+    kafka:
+        image: confluentinc/cp-kafka:latest
+        network_mode: host
+        depends_on:
+            - zookeeper
+        environment:
+            KAFKA_BROKER_ID: 1  
+            KAFKA_ZOOKEEPER_CONNECT: localhost:2180
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:29092
+            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
