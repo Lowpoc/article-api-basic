@@ -1,0 +1,11 @@
+version: '3'
+services:
+    kafkaADM:
+        image: sheepkiller/kafka-manager
+        depends_on: 
+            - zookeeper
+            - kafka
+        ports: 
+            - "9000:9000"
+        environment: 
+            ZK_HOSTS: localhost:2180
